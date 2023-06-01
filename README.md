@@ -5,15 +5,13 @@ The application will simply open the SAML page to let you sign in.
 As soon as the `SVPNCOOKIE` is set, the application will print it to
 stdout and exit.
 
-The application comes in two flavors:
- - [openfortivpn-webview-qt](openfortivpn-webview-qt/)
- - [openfortivpn-webview-electron](openfortivpn-webview-electron/)
-
-They should be equivalent, but `openfortivpn-webview-qt` may have
-some issues with some SAML providers.
-
-
 ## Usage
+
+As a single command with `openfortivpn`:
+
+```bash
+sudo openfortivpn $DOMAIN --cookie=$(openfortivpn-webview $DOMAIN)
+```
 
 Obtain `SVPNCOOKIE` for host `vpn-gateway`:
 ```sh
@@ -43,16 +41,13 @@ is specified, the application will look for URLs containing `/sslvpn/portal.html
 Waiting for such URL allows to deal with concurrent VPN sessions when the
 gateway is configured to allow a single active session.
 
+---
 
 The inner Chromium engine may print a lot of messages. You can disable them
 to only see the messages of the application.
 
 ```sh
-# If you use the Qt variant
 QT_LOGGING_RULES="*=false;webview=true" QTWEBENGINE_CHROMIUM_FLAGS="--enable-logging --log-level=3" openfortivpn-webview vpn-gateway
-
-# If you use the Electron variant
-openfortivpn-webview --enable-logging --log-level=3 vpn-gateway
 ```
 
 ## Proxy servers
@@ -64,19 +59,5 @@ Note that when using the Electron variant, all command line options are
 also passed along to Chromium.
 
 ```sh
-# If you use the Qt variant
 QTWEBENGINE_CHROMIUM_FLAGS="--proxy-server=proxy.example.com:8080" openfortivpn-webview vpn-gateway
-
-# If you use the Electron variant
-openfortivpn-webview vpn-gateway --proxy-server=proxy.example.com:8080
-```
-
-## Passing command line options when using `npm start`
-
-If you use `npm start` to start the Electron variant, you need to separate
-the command line options to the application from the command line options
-to npm using `--`, like this:
-
-```sh
-npm start myvpnhost -- --proxy-server=proxy.example.com:8080
 ```

@@ -21,8 +21,28 @@ static QScreen *findScreenWithCursor()
     return QApplication::primaryScreen();
 }
 
+void messageOutput(QtMsgType type, const QMessageLogContext &ctx, const QString &msg)
+{
+    QByteArray localMsg = msg.toLocal8Bit();
+
+    switch (type) {
+    case QtDebugMsg:
+    case QtInfoMsg:
+    case QtWarningMsg:
+        break;
+    case QtCriticalMsg:
+        fprintf(stderr, "Critical: %s", localMsg.constData());
+        break;
+    case QtFatalMsg:
+        fprintf(stderr, "Fatal: %s", localMsg.constData());
+        break;
+    }
+}
+
 int main(int argc, char *argv[])
 {
+    qInstallMessageHandler(messageOutput);
+
     QApplication app(argc, argv);
 
     auto optionRealm = QCommandLineOption("realm", "The authentication realm.", "realm");
@@ -72,7 +92,7 @@ int main(int argc, char *argv[])
 
     MainWindow w(keepOpen, urlRegex);
     w.loadUrl(url);
-    w.resize(1024, 760);
+    w.resize(800, 600);
     w.move(findScreenWithCursor()->geometry().center() - w.rect().center());
     w.show();
 

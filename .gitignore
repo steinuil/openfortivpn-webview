@@ -1,0 +1,10 @@
+/openfortivpn-webview
+
+Makefile
+CMakeCache.txt
+cmake_install.cmake
+CMakeFiles
+CMakeScripts
+compile_commands.json
+.cache
+*_autogen

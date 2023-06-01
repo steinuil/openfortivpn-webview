@@ -23,8 +23,6 @@ MainWindow::MainWindow(const bool keepOpen,
 {
     setCentralWidget(webEngine);
 
-    createMenuBar();
-
     QString appDataLocation = QStandardPaths::locate(QStandardPaths::AppDataLocation,
                                                      QString(),
                                                      QStandardPaths::LocateDirectory);
@@ -100,30 +98,6 @@ void MainWindow::handleUrlChange(const QUrl &url)
 void MainWindow::updateTitle(const QString &title)
 {
    setWindowTitle(title);
-}
-
-void MainWindow::createMenuBar()
-{
-    QAction *reload = new QAction(tr("&Reload"), this);
-    connect(reload, &QAction::triggered, this,
-            [this]() {
-                webEngine->reload();
-            });
-
-    QAction *clearData = new QAction(tr("&Clear data"), this);
-    connect(clearData, &QAction::triggered, this,
-            [this]() {
-                auto profile = webEngine->page()->profile();
-                profile->clearHttpCache();
-                profile->clearAllVisitedLinks();
-                profile->cookieStore()->deleteAllCookies();
-                webEngine->history()->clear();
-            });
-
-    QMenu *fileMenu = menuBar()->addMenu(tr("&File"));
-    fileMenu->addAction(reload);
-    fileMenu->addSeparator();
-    fileMenu->addAction(clearData);
 }
 
 void MainWindow::closeEvent(QCloseEvent *)
